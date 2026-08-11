@@ -13,14 +13,27 @@ enum L10n {
     }
 
     private static var localizedBundle: Bundle {
+        let base = resourceBundle
+
         guard
-            let path = Bundle.module.path(forResource: selectedLanguage, ofType: "lproj"),
+            let path = base.path(forResource: selectedLanguage, ofType: "lproj"),
             let bundle = Bundle(path: path)
         else {
-            return Bundle.module
+            return base
         }
 
         return bundle
+    }
+
+    /// Packaged `rcmd.app` carries the `.lproj` folders in `Contents/Resources`,
+    /// so it must not touch `Bundle.module`: that accessor only looks next to the
+    /// bundle root or in the SwiftPM build directory and traps when neither exists.
+    private static var resourceBundle: Bundle {
+        if Bundle.main.path(forResource: fallbackLanguage, ofType: "lproj") != nil {
+            return .main
+        }
+
+        return .module
     }
 
     private static var selectedLanguage: String {
