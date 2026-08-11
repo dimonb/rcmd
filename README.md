@@ -29,6 +29,7 @@ left Command shortcuts alone.
 - Optionally minimize the active window when its app shortcut is pressed again.
 - Persist config in readable YAML at `~/.config/rcmd/config.yaml`.
 - Package the app as a local DMG with an `Applications` shortcut.
+- Install into `/Applications` and enable autostart with `make install`.
 
 ## Screenshots
 
@@ -42,15 +43,29 @@ left Command shortcuts alone.
 
 ## Install For Local Testing
 
-Build the DMG:
+Install straight into `/Applications`, register Launch at Login, and start the
+app:
+
+```sh
+make install
+```
+
+Variants:
+
+```sh
+make install INSTALL_DIR="$HOME/Applications"
+LOGIN_ITEM=0 ./scripts/install-local.sh   # install without autostart
+LAUNCH=0 ./scripts/install-local.sh       # install without launching
+```
+
+`make install` replaces any previously installed `rcmd.app` and stops the
+running instance first. Because local builds are ad-hoc signed, macOS asks for
+Accessibility permission again after every reinstall.
+
+Alternatively, build the DMG:
 
 ```sh
 make package
-```
-
-Open it:
-
-```sh
 open dist/rcmd-local-macos.dmg
 ```
 
@@ -162,6 +177,14 @@ make package VERSION=0.1.0
 `make ci` builds the SwiftPM package, runs the XCTest suite, and verifies app
 bundle packaging.
 
+Launch at Login can only be registered by the app bundle itself, so the
+installer calls the app with a headless flag:
+
+```sh
+/Applications/rcmd.app/Contents/MacOS/rcmd --enable-login-item
+/Applications/rcmd.app/Contents/MacOS/rcmd --disable-login-item
+```
+
 ## Logs
 
 Keyboard and app logs use the `dev.local.rcmd` subsystem:
@@ -173,7 +196,7 @@ log stream --level debug --style compact --predicate 'subsystem == "dev.local.rc
 If the menu bar item is not visible, check whether the process is running:
 
 ```sh
-pgrep -fl rcmd-app
+pgrep -fl rcmd
 ```
 
 ## Release

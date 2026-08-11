@@ -47,8 +47,10 @@ Implemented:
 - stable OSD footer search input with smoothed selection and edge scrolling;
 - event-tap-driven window search input that preserves system language-switching
   shortcuts;
-- `.app` bundle packaging with Info.plist, generated AppIcon.icns, DMG output,
-  and ad-hoc signing.
+- `.app` bundle packaging with Info.plist, bundled `.lproj` resources,
+  generated AppIcon.icns, DMG output, and ad-hoc signing;
+- `make install` for installing into `/Applications` and registering Launch at
+  Login through the app's `--enable-login-item` flag.
 
 Not implemented:
 
@@ -99,6 +101,9 @@ later milestones and depend on the app/window foundation.
   reporting completion.
 - Current verification commands are `swift build`, `swift test`, and
   `make package`.
+- Packaging changes must be verified with the SwiftPM build directory moved
+  aside, because `Bundle.module` silently falls back to the absolute build path
+  baked into the binary and hides a broken bundle.
 - Update `PROJECT_PLAN.md` whenever scope, status, or milestone order changes.
 - Update this file only for agent workflow rules, not detailed product planning.
 

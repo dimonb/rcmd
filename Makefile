@@ -4,8 +4,9 @@ SWIFT ?= swift
 BUMP ?= patch
 PUSH ?= 0
 VERSION ?=
+INSTALL_DIR ?=
 
-.PHONY: build test ci package release release-push clean
+.PHONY: build test ci package install release release-push clean
 
 build:
 	$(SWIFT) build
@@ -22,6 +23,9 @@ ci: build test package
 
 package:
 	VERSION="$(VERSION)" ./scripts/package-release.sh
+
+install:
+	INSTALL_DIR="$(INSTALL_DIR)" VERSION="$(VERSION)" ./scripts/install-local.sh
 
 release: ci
 	BUMP="$(BUMP)" VERSION="$(VERSION)" PUSH="$(PUSH)" ./scripts/release.sh

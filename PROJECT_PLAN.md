@@ -64,9 +64,13 @@ Done:
   polling while idle; installed app catalog scans are cached during runtime.
 - GitHub Actions CI exists for branch pushes and pull requests.
 - Tag-driven GitHub Actions release publishing exists for `v*.*.*` tags.
-- Local `make` targets exist for CI, DMG packaging, and release tag creation.
-- DMG packaging now contains `rcmd.app` with `Info.plist`, generated
-  `AppIcon.icns`, `LSUIElement=true`, and ad-hoc signing.
+- Local `make` targets exist for CI, DMG packaging, local install, and release
+  tag creation.
+- DMG packaging now contains `rcmd.app` with `Info.plist`, bundled `.lproj`
+  localizations, generated `AppIcon.icns`, `LSUIElement=true`, and ad-hoc
+  signing.
+- `make install` installs `rcmd.app` into `/Applications`, replaces a running
+  instance, and registers Launch at Login through `SMAppService`.
 
 Not done:
 
@@ -461,3 +465,4 @@ MVP v0.1 is done when:
 - README explains how to build and run locally.
 - Local DMG packaging produces an installable `rcmd.app` with an
   `Applications` shortcut.
+- `make install` puts `rcmd.app` in `/Applications` and enables autostart.
