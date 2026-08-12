@@ -105,6 +105,10 @@ tested repeatedly. The menu bar item also includes **Quick Start...**.
 | `⌘ + Tab` | Focus next readable window |
 | `⌘ + Right Option + letter` | Assign frontmost app |
 
+Holding **Shift** turns rcmd off for as long as it is down: the OSD does not
+appear, and `⌘ + Shift + key` reaches the frontmost app untouched, so app and
+system shortcuts built on `⌘⇧` keep working.
+
 ## Settings
 
 The Settings window is split into focused panes:

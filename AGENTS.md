@@ -39,6 +39,8 @@ Implemented:
 - polished OSD overlay with app icons while right Command is held;
 - configurable OSD show delay (0-1000 ms, 120 ms by default) persisted in
   config;
+- Shift held suppresses the overlay and lets `right cmd + shift + key` pass
+  through to the frontmost app;
 - visual assignment editor with app icons in Settings;
 - Launch at Login setting through `SMAppService`;
 - read-only window diagnostics through Accessibility API;

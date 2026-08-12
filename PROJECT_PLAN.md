@@ -49,6 +49,8 @@ Done:
   with app icons.
 - The overlay show delay is configurable in Settings (0-1000 ms, 120 ms by
   default) and persisted in config.
+- Holding Shift suppresses the overlay and passes `right cmd + shift + key`
+  through, so `⌘⇧` app and system shortcuts are untouched.
 - Visual assignment editor with app icons exists in Settings.
 - Launch at Login setting exists through `SMAppService`.
 - Read-only window diagnostics exist through Accessibility API and are shown in

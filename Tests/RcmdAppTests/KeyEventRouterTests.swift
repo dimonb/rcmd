@@ -13,6 +13,46 @@ final class KeyEventRouterTests: XCTestCase {
         XCTAssertFalse(router.isRightCommandHeld)
     }
 
+    func testShiftPressedWhileRightCommandIsHeldHidesAndRestoresOverlay() {
+        var router = KeyEventRouter()
+
+        XCTAssertEqual(router.route(input(kind: .flagsChanged, keyCode: KeyCode.rightCommand, flags: [.maskCommand])), .rightCommandChanged(true))
+
+        XCTAssertEqual(
+            router.route(input(kind: .flagsChanged, keyCode: KeyCode.leftShift, flags: [.maskCommand, .maskShift])),
+            .rightCommandChanged(false)
+        )
+
+        XCTAssertEqual(
+            router.route(input(kind: .flagsChanged, keyCode: KeyCode.leftShift, flags: [.maskCommand])),
+            .rightCommandChanged(true)
+        )
+    }
+
+    func testRightCommandPressedWhileShiftIsHeldDoesNotShowOverlay() {
+        var router = KeyEventRouter()
+
+        XCTAssertEqual(router.route(input(kind: .flagsChanged, keyCode: KeyCode.leftShift, flags: [.maskShift])), .passThrough)
+        XCTAssertEqual(
+            router.route(input(kind: .flagsChanged, keyCode: KeyCode.rightCommand, flags: [.maskCommand, .maskShift])),
+            .passThrough
+        )
+
+        XCTAssertEqual(
+            router.route(input(kind: .flagsChanged, keyCode: KeyCode.leftShift, flags: [.maskCommand])),
+            .rightCommandChanged(true)
+        )
+    }
+
+    func testShiftedRightCommandKeysPassThroughInsteadOfRoutingShortcuts() {
+        var router = KeyEventRouter()
+        _ = router.route(input(kind: .flagsChanged, keyCode: KeyCode.rightCommand, flags: [.maskCommand]))
+        _ = router.route(input(kind: .flagsChanged, keyCode: KeyCode.leftShift, flags: [.maskCommand, .maskShift]))
+
+        XCTAssertEqual(router.route(input(kind: .keyDown, keyCode: KeyCode.c, flags: [.maskCommand, .maskShift])), .passThrough)
+        XCTAssertEqual(router.route(input(kind: .keyDown, keyCode: KeyCode.tab, flags: [.maskCommand, .maskShift])), .passThrough)
+    }
+
     func testRightCommandLetterRoutesActivateShortcutAndSuppressesKeyUp() {
         var router = KeyEventRouter()
         _ = router.route(input(kind: .flagsChanged, keyCode: KeyCode.rightCommand, flags: [.maskCommand]))
