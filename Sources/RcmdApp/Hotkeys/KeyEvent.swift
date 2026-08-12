@@ -23,6 +23,10 @@ struct KeyEvent: Sendable, Equatable {
         CGEventFlags(rawValue: rawFlags).contains(.maskAlternate)
     }
 
+    var shiftDown: Bool {
+        CGEventFlags(rawValue: rawFlags).contains(.maskShift)
+    }
+
     var isRightCommandKey: Bool {
         keyCode == KeyCode.rightCommand
     }
@@ -71,6 +75,8 @@ enum KeyCode {
     static let rightCommand: Int64 = 54
     static let leftOption: Int64 = 58
     static let rightOption: Int64 = 61
+    static let leftShift: Int64 = 56
+    static let rightShift: Int64 = 60
     static let `return`: Int64 = 36
     static let tab: Int64 = 48
     static let space: Int64 = 49

@@ -20,22 +20,36 @@ struct KeyEventRoutingInput {
 struct KeyEventRouter {
     private var rightCommandHeld = false
     private var rightOptionHeld = false
+    private var shiftHeld = false
     private var consumedKeyCodes = Set<Int64>()
 
     var isRightCommandHeld: Bool {
         rightCommandHeld
     }
 
+    /// Shift is what the system and apps build their own `⌘⇧` shortcuts on, so rcmd stays
+    /// out of the way while it is held: no overlay, and no key capture either.
+    private var isTriggerActive: Bool {
+        rightCommandHeld && !shiftHeld
+    }
+
     mutating func route(_ input: KeyEventRoutingInput) -> KeyEventRouteDecision {
+        let wasTriggerActive = isTriggerActive
+        shiftHeld = input.event.shiftDown
         reconcileModifierState(from: input.event)
 
-        if input.event.kind == .flagsChanged, input.event.isRightCommandKey {
-            return handleRightCommandFlagsChanged(input.event)
-        }
+        if input.event.kind == .flagsChanged {
+            if input.event.isRightCommandKey {
+                updateRightCommandHeld(input.event)
+            } else if input.event.isRightOptionKey {
+                rightOptionHeld = input.event.optionDown
+            }
 
-        if input.event.kind == .flagsChanged, input.event.isRightOptionKey {
-            rightOptionHeld = input.event.optionDown
-            return .passThrough
+            guard isTriggerActive != wasTriggerActive else {
+                return .passThrough
+            }
+
+            return .rightCommandChanged(isTriggerActive)
         }
 
         if input.event.kind == .keyUp, consumedKeyCodes.remove(input.event.keyCode) != nil {
@@ -49,7 +63,7 @@ struct KeyEventRouter {
         }
 
         guard input.event.kind == .keyDown,
-              rightCommandHeld,
+              isTriggerActive,
               !input.isAutorepeat else {
             return .passThrough
         }
@@ -84,37 +98,31 @@ struct KeyEventRouter {
     mutating func resetAll() {
         _ = resetRightCommandState()
         rightOptionHeld = false
+        shiftHeld = false
     }
 
     mutating func reconcileModifierStateFromSystemFlags(_ flags: CGEventFlags) -> Bool {
-        let didReleaseRightCommand: Bool
+        let wasTriggerActive = isTriggerActive
+        shiftHeld = flags.contains(.maskShift)
+
         if rightCommandHeld, !flags.contains(.maskCommand) {
-            didReleaseRightCommand = resetRightCommandState()
-        } else {
-            didReleaseRightCommand = false
+            _ = resetRightCommandState()
         }
 
         if rightOptionHeld, !flags.contains(.maskAlternate) {
             rightOptionHeld = false
         }
 
-        return didReleaseRightCommand
+        return wasTriggerActive && !isTriggerActive
     }
 
-    private mutating func handleRightCommandFlagsChanged(_ event: KeyEvent) -> KeyEventRouteDecision {
-        let wasHeld = rightCommandHeld
+    private mutating func updateRightCommandHeld(_ event: KeyEvent) {
         rightCommandHeld = event.commandDown
 
         if !rightCommandHeld {
             rightOptionHeld = false
             consumedKeyCodes.removeAll()
         }
-
-        guard wasHeld != rightCommandHeld else {
-            return .passThrough
-        }
-
-        return .rightCommandChanged(rightCommandHeld)
     }
 
     private mutating func routeWindowSearchKeyDown(_ input: KeyEventRoutingInput) -> KeyEventRouteDecision? {

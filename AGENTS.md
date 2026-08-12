@@ -37,6 +37,8 @@ Implemented:
 - manual assignment capture with `right cmd + right option + letter`;
 - assignment persistence in `~/.config/rcmd/config.yaml`;
 - polished OSD overlay with app icons while right Command is held;
+- Shift held suppresses the overlay and lets `right cmd + shift + key` pass
+  through to the frontmost app;
 - visual assignment editor with app icons in Settings;
 - Launch at Login setting through `SMAppService`;
 - read-only window diagnostics through Accessibility API;

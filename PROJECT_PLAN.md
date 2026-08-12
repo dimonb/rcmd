@@ -47,6 +47,8 @@ Done:
 - Assignments persist in `~/.config/rcmd/config.yaml`.
 - Holding right Command opens a polished, scrollable OSD assignment overlay
   with app icons.
+- Holding Shift suppresses the overlay and passes `right cmd + shift + key`
+  through, so `⌘⇧` app and system shortcuts are untouched.
 - Visual assignment editor with app icons exists in Settings.
 - Launch at Login setting exists through `SMAppService`.
 - Read-only window diagnostics exist through Accessibility API and are shown in
