@@ -6,6 +6,7 @@ struct SettingsActions {
     let removeManualAssignment: @MainActor (_ letter: Character) -> Void
     let setKeyMappingMode: @MainActor (_ mode: KeyMappingMode) -> Void
     let setMinimizeActiveWindowOnRepeatedShortcut: @MainActor (_ enabled: Bool) -> Void
+    let setOSDShowDelayMilliseconds: @MainActor (_ milliseconds: Int) -> Void
     let setLaunchAtLogin: @MainActor (_ enabled: Bool) -> Void
 }
 

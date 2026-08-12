@@ -47,6 +47,9 @@ final class RcmdApp: NSObject, NSApplicationDelegate {
                 setMinimizeActiveWindowOnRepeatedShortcut: { [weak self] enabled in
                     self?.setMinimizeActiveWindowOnRepeatedShortcut(enabled)
                 },
+                setOSDShowDelayMilliseconds: { [weak self] milliseconds in
+                    self?.setOSDShowDelayMilliseconds(milliseconds)
+                },
                 setLaunchAtLogin: { [weak self] enabled in
                     self?.setLaunchAtLoginEnabled(enabled)
                 }
@@ -115,6 +118,7 @@ final class RcmdApp: NSObject, NSApplicationDelegate {
         refreshAccessibilityAndStartMonitorIfReady()
         refreshKeyMappingMode()
         refreshMinimizeActiveWindowOnRepeatedShortcut()
+        refreshOSDShowDelay()
         refreshLaunchAtLogin()
         refreshAssignments()
         refreshAppCatalog()
@@ -314,7 +318,9 @@ final class RcmdApp: NSObject, NSApplicationDelegate {
         }
 
         pendingOSDShowWorkItem = workItem
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.12, execute: workItem)
+
+        let delay = Double(assignmentStore.osdShowDelayMilliseconds) / 1000
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
     }
 
     private func cancelPendingOSDShow() {
@@ -374,6 +380,10 @@ final class RcmdApp: NSObject, NSApplicationDelegate {
         appState.refreshMinimizeActiveWindowOnRepeatedShortcut(assignmentStore.minimizeActiveWindowOnRepeatedShortcut)
     }
 
+    private func refreshOSDShowDelay() {
+        appState.refreshOSDShowDelayMilliseconds(assignmentStore.osdShowDelayMilliseconds)
+    }
+
     private func refreshLaunchAtLogin() {
         appState.refreshLaunchAtLogin(launchAtLoginController.currentState())
     }
@@ -405,6 +415,13 @@ final class RcmdApp: NSObject, NSApplicationDelegate {
         assignmentStore.setMinimizeActiveWindowOnRepeatedShortcut(enabled)
         refreshMinimizeActiveWindowOnRepeatedShortcut()
         appState.recordMinimizeActiveWindowOnRepeatedShortcutChange(enabled)
+        menuBarController?.refresh()
+    }
+
+    func setOSDShowDelayMilliseconds(_ milliseconds: Int) {
+        assignmentStore.setOSDShowDelayMilliseconds(milliseconds)
+        refreshOSDShowDelay()
+        appState.recordOSDShowDelayChange(assignmentStore.osdShowDelayMilliseconds)
         menuBarController?.refresh()
     }
 

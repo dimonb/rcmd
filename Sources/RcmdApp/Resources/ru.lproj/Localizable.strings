@@ -63,6 +63,7 @@
 "settings.group.snapshot" = "Снимок";
 "settings.group.shortcuts" = "Сочетания";
 "settings.group.behavior" = "Поведение";
+"settings.group.overlay" = "Оверлей";
 "settings.group.keyMapping" = "Привязка клавиш";
 "settings.group.manualAssignment" = "Ручное назначение";
 "settings.group.currentAssignments" = "Текущие назначения";
@@ -84,6 +85,10 @@
 "settings.shortcut.assignFrontmost" = "Назначить активное приложение";
 "settings.minimizeRepeatedShortcut" = "Сворачивать активное окно при повторном сочетании";
 "settings.minimizeRepeatedShortcutDetail" = "Если целевое приложение уже активно, повторное нажатие ⌘-сочетания сворачивает сфокусированное окно вместо повторного фокуса приложения.";
+"settings.osdShowDelay" = "Задержка оверлея";
+"settings.osdShowDelayValue" = "%d мс";
+"settings.osdShowDelayInstant" = "Сразу";
+"settings.osdShowDelayDetail" = "Сколько нужно удерживать правый ⌘, прежде чем появится оверлей. Если нажать сочетание раньше, оверлей не покажется.";
 "settings.keyMapping" = "Привязка клавиш";
 "settings.keyMappingActiveLayoutDetail" = "Использует текущую латинскую раскладку macOS, с fallback на физическую QWERTY для нелатинских раскладок.";
 "settings.keyMappingPhysicalDetail" = "Использует физические позиции QWERTY независимо от текущей раскладки.";
@@ -117,6 +122,7 @@
 "status.keyMappingChanged" = "Режим привязки клавиш: %@.";
 "status.repeatedShortcutMinimizeEnabled" = "Сворачивание при повторном сочетании включено.";
 "status.repeatedShortcutMinimizeDisabled" = "Сворачивание при повторном сочетании выключено.";
+"status.osdShowDelayChanged" = "Задержка оверлея: %d мс.";
 
 "appActivation.focused" = "%@ в фокусе.";
 "appActivation.minimized" = "Активное окно %@ свернуто.";

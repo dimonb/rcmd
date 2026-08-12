@@ -63,6 +63,7 @@
 "settings.group.snapshot" = "Momentaufnahme";
 "settings.group.shortcuts" = "Tastenkürzel";
 "settings.group.behavior" = "Verhalten";
+"settings.group.overlay" = "Overlay";
 "settings.group.keyMapping" = "Tastenzuordnung";
 "settings.group.manualAssignment" = "Manuelle Zuweisung";
 "settings.group.currentAssignments" = "Aktuelle Zuweisungen";
@@ -84,6 +85,10 @@
 "settings.shortcut.assignFrontmost" = "Vorderste App zuweisen";
 "settings.minimizeRepeatedShortcut" = "Aktives Fenster bei wiederholtem App-Kürzel minimieren";
 "settings.minimizeRepeatedShortcutDetail" = "Wenn die Ziel-App bereits aktiv ist, minimiert ein erneutes ⌘-Kürzel das fokussierte Fenster, statt die App erneut zu fokussieren.";
+"settings.osdShowDelay" = "Overlay-Verzögerung";
+"settings.osdShowDelayValue" = "%d ms";
+"settings.osdShowDelayInstant" = "Sofort";
+"settings.osdShowDelayDetail" = "Wie lange die rechte ⌘-Taste gehalten werden muss, bis das Overlay erscheint. Wird vorher ein Kürzel gedrückt, bleibt das Overlay ausgeblendet.";
 "settings.keyMapping" = "Tastenzuordnung";
 "settings.keyMappingActiveLayoutDetail" = "Verwendet das aktive lateinische macOS-Tastaturlayout, mit physischer QWERTY-Ausweichlösung für nicht-lateinische Layouts.";
 "settings.keyMappingPhysicalDetail" = "Verwendet physische QWERTY-Tastenpositionen unabhängig vom aktiven Tastaturlayout.";
@@ -117,6 +122,7 @@
 "status.keyMappingChanged" = "Tastenzuordnung auf %@ gesetzt.";
 "status.repeatedShortcutMinimizeEnabled" = "Minimieren bei wiederholtem App-Kürzel ist aktiviert.";
 "status.repeatedShortcutMinimizeDisabled" = "Minimieren bei wiederholtem App-Kürzel ist deaktiviert.";
+"status.osdShowDelayChanged" = "Overlay-Verzögerung auf %d ms gesetzt.";
 
 "appActivation.focused" = "%@ fokussiert.";
 "appActivation.minimized" = "Aktives Fenster von %@ minimiert.";

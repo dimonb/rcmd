@@ -37,6 +37,8 @@ Implemented:
 - manual assignment capture with `right cmd + right option + letter`;
 - assignment persistence in `~/.config/rcmd/config.yaml`;
 - polished OSD overlay with app icons while right Command is held;
+- configurable OSD show delay (0-1000 ms, 120 ms by default) persisted in
+  config;
 - visual assignment editor with app icons in Settings;
 - Launch at Login setting through `SMAppService`;
 - read-only window diagnostics through Accessibility API;

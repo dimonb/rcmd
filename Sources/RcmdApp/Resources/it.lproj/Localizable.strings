@@ -63,6 +63,7 @@
 "settings.group.snapshot" = "Snapshot";
 "settings.group.shortcuts" = "Scorciatoie";
 "settings.group.behavior" = "Comportamento";
+"settings.group.overlay" = "Overlay";
 "settings.group.keyMapping" = "Mappatura tasti";
 "settings.group.manualAssignment" = "Assegnazione manuale";
 "settings.group.currentAssignments" = "Assegnazioni correnti";
@@ -84,6 +85,10 @@
 "settings.shortcut.assignFrontmost" = "Assegna l’app in primo piano";
 "settings.minimizeRepeatedShortcut" = "Minimizza la finestra attiva ripetendo la scorciatoia app";
 "settings.minimizeRepeatedShortcutDetail" = "Quando l’app di destinazione è già attiva, premere di nuovo la sua scorciatoia ⌘ minimizza la finestra focalizzata invece di rifocalizzare l’app.";
+"settings.osdShowDelay" = "Ritardo dell’overlay";
+"settings.osdShowDelayValue" = "%d ms";
+"settings.osdShowDelayInstant" = "Immediato";
+"settings.osdShowDelayDetail" = "Per quanto tempo va tenuto premuto il tasto ⌘ destro prima che compaia l’overlay. Se premi una scorciatoia prima, l’overlay resta nascosto.";
 "settings.keyMapping" = "Mappatura tasti";
 "settings.keyMappingActiveLayoutDetail" = "Usa il layout latino macOS attivo, con fallback QWERTY fisico per layout non latini.";
 "settings.keyMappingPhysicalDetail" = "Usa le posizioni fisiche QWERTY indipendentemente dal layout tastiera attivo.";
@@ -117,6 +122,7 @@
 "status.keyMappingChanged" = "Modalità mappatura tasti impostata su %@.";
 "status.repeatedShortcutMinimizeEnabled" = "Minimizzazione alla ripetizione della scorciatoia app attivata.";
 "status.repeatedShortcutMinimizeDisabled" = "Minimizzazione alla ripetizione della scorciatoia app disattivata.";
+"status.osdShowDelayChanged" = "Ritardo dell’overlay impostato a %d ms.";
 
 "appActivation.focused" = "%@ focalizzata.";
 "appActivation.minimized" = "Finestra attiva di %@ minimizzata.";

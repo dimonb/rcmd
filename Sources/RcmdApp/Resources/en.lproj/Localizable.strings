@@ -63,6 +63,7 @@
 "settings.group.snapshot" = "Snapshot";
 "settings.group.shortcuts" = "Shortcuts";
 "settings.group.behavior" = "Behavior";
+"settings.group.overlay" = "Overlay";
 "settings.group.keyMapping" = "Key mapping";
 "settings.group.manualAssignment" = "Manual assignment";
 "settings.group.currentAssignments" = "Current assignments";
@@ -84,6 +85,10 @@
 "settings.shortcut.assignFrontmost" = "Assign frontmost app";
 "settings.minimizeRepeatedShortcut" = "Minimize active window on repeated app shortcut";
 "settings.minimizeRepeatedShortcutDetail" = "When the target app is already active, pressing its ⌘ shortcut again minimizes the focused window instead of refocusing the app.";
+"settings.osdShowDelay" = "Overlay delay";
+"settings.osdShowDelayValue" = "%d ms";
+"settings.osdShowDelayInstant" = "Instant";
+"settings.osdShowDelayDetail" = "How long right ⌘ must be held before the overlay appears. Press a shortcut sooner and the overlay stays hidden.";
 "settings.keyMapping" = "Key mapping";
 "settings.keyMappingActiveLayoutDetail" = "Uses the active Latin macOS keyboard layout, with physical QWERTY fallback for non-Latin layouts.";
 "settings.keyMappingPhysicalDetail" = "Uses physical QWERTY letter positions regardless of active keyboard layout.";
@@ -117,6 +122,7 @@
 "status.keyMappingChanged" = "Key mapping mode set to %@.";
 "status.repeatedShortcutMinimizeEnabled" = "Repeated app shortcut minimize is enabled.";
 "status.repeatedShortcutMinimizeDisabled" = "Repeated app shortcut minimize is disabled.";
+"status.osdShowDelayChanged" = "Overlay delay set to %d ms.";
 
 "appActivation.focused" = "%@ focused.";
 "appActivation.minimized" = "%@ active window minimized.";

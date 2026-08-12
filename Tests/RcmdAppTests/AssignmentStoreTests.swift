@@ -9,6 +9,7 @@ final class AssignmentStoreTests: XCTestCase {
         XCTAssertEqual(store.assignmentsByLetter, [:])
         XCTAssertEqual(store.keyMappingMode, .activeLayout)
         XCTAssertFalse(store.minimizeActiveWindowOnRepeatedShortcut)
+        XCTAssertEqual(store.osdShowDelayMilliseconds, AssignmentStore.defaultOSDShowDelayMilliseconds)
     }
 
     func testSavingAndLoadingConfigPersistsSettingsAndAssignments() {
@@ -17,6 +18,7 @@ final class AssignmentStoreTests: XCTestCase {
 
         store.setKeyMappingMode(.physical)
         store.setMinimizeActiveWindowOnRepeatedShortcut(true)
+        store.setOSDShowDelayMilliseconds(300)
         store.set(bundleIdentifier: "com.google.Chrome", for: "C")
         store.set(bundleIdentifier: "com.apple.finder", for: "f")
 
@@ -24,6 +26,7 @@ final class AssignmentStoreTests: XCTestCase {
 
         XCTAssertEqual(loadedStore.keyMappingMode, .physical)
         XCTAssertTrue(loadedStore.minimizeActiveWindowOnRepeatedShortcut)
+        XCTAssertEqual(loadedStore.osdShowDelayMilliseconds, 300)
         XCTAssertEqual(loadedStore.bundleIdentifier(for: "c"), "com.google.Chrome")
         XCTAssertEqual(loadedStore.bundleIdentifier(for: "F"), "com.apple.finder")
     }
@@ -45,7 +48,46 @@ final class AssignmentStoreTests: XCTestCase {
 
         XCTAssertEqual(store.keyMappingMode, .physical)
         XCTAssertFalse(store.minimizeActiveWindowOnRepeatedShortcut)
+        XCTAssertEqual(store.osdShowDelayMilliseconds, AssignmentStore.defaultOSDShowDelayMilliseconds)
         XCTAssertEqual(store.bundleIdentifier(for: "z"), "dev.zed.Zed")
+    }
+
+    func testOSDShowDelayIsClampedWhenSetAndWhenLoaded() throws {
+        let configURL = temporaryConfigURL()
+        let store = AssignmentStore(configURL: configURL)
+
+        store.setOSDShowDelayMilliseconds(-50)
+        XCTAssertEqual(store.osdShowDelayMilliseconds, AssignmentStore.osdShowDelayMillisecondsRange.lowerBound)
+
+        store.setOSDShowDelayMilliseconds(9_000)
+        XCTAssertEqual(store.osdShowDelayMilliseconds, AssignmentStore.osdShowDelayMillisecondsRange.upperBound)
+
+        try """
+        # rcmd configuration
+        osdShowDelayMilliseconds: 5000
+        assignments:
+        """.write(to: configURL, atomically: true, encoding: .utf8)
+
+        let loadedStore = AssignmentStore(configURL: configURL)
+
+        XCTAssertEqual(loadedStore.osdShowDelayMilliseconds, AssignmentStore.osdShowDelayMillisecondsRange.upperBound)
+    }
+
+    func testInvalidOSDShowDelayValueFallsBackToDefault() throws {
+        let configURL = temporaryConfigURL()
+        try FileManager.default.createDirectory(
+            at: configURL.deletingLastPathComponent(),
+            withIntermediateDirectories: true
+        )
+        try """
+        # rcmd configuration
+        osdShowDelayMilliseconds: soon
+        assignments:
+        """.write(to: configURL, atomically: true, encoding: .utf8)
+
+        let store = AssignmentStore(configURL: configURL)
+
+        XCTAssertEqual(store.osdShowDelayMilliseconds, AssignmentStore.defaultOSDShowDelayMilliseconds)
     }
 
     private func temporaryConfigURL(file: StaticString = #filePath, line: UInt = #line) -> URL {

@@ -20,9 +20,13 @@ enum KeyMappingMode: String, CaseIterable, Identifiable, Sendable {
 
 @MainActor
 final class AssignmentStore {
+    static let defaultOSDShowDelayMilliseconds = 120
+    static let osdShowDelayMillisecondsRange = 0...1000
+
     private(set) var assignmentsByLetter: [Character: String] = [:]
     private(set) var keyMappingMode: KeyMappingMode = .activeLayout
     private(set) var minimizeActiveWindowOnRepeatedShortcut = false
+    private(set) var osdShowDelayMilliseconds = AssignmentStore.defaultOSDShowDelayMilliseconds
 
     private let configURL: URL
 
@@ -55,6 +59,11 @@ final class AssignmentStore {
         save()
     }
 
+    func setOSDShowDelayMilliseconds(_ milliseconds: Int) {
+        osdShowDelayMilliseconds = AssignmentStore.clampOSDShowDelay(milliseconds)
+        save()
+    }
+
     private func load() {
         guard
             let contents = try? String(contentsOf: configURL, encoding: .utf8),
@@ -67,6 +76,7 @@ final class AssignmentStore {
         var parsedAssignments: [Character: String] = [:]
         var parsedKeyMappingMode = KeyMappingMode.activeLayout
         var parsedMinimizeActiveWindowOnRepeatedShortcut = false
+        var parsedOSDShowDelayMilliseconds = AssignmentStore.defaultOSDShowDelayMilliseconds
         var inAssignmentsSection = false
 
         for rawLine in contents.components(separatedBy: .newlines) {
@@ -97,6 +107,10 @@ final class AssignmentStore {
                     parsedMinimizeActiveWindowOnRepeatedShortcut = value == "true"
                 }
 
+                if key == "osdShowDelayMilliseconds", let milliseconds = Int(value) {
+                    parsedOSDShowDelayMilliseconds = AssignmentStore.clampOSDShowDelay(milliseconds)
+                }
+
                 continue
             }
 
@@ -123,6 +137,7 @@ final class AssignmentStore {
         assignmentsByLetter = parsedAssignments
         keyMappingMode = parsedKeyMappingMode
         minimizeActiveWindowOnRepeatedShortcut = parsedMinimizeActiveWindowOnRepeatedShortcut
+        osdShowDelayMilliseconds = parsedOSDShowDelayMilliseconds
     }
 
     private func save() {
@@ -136,6 +151,7 @@ final class AssignmentStore {
                 "# rcmd configuration",
                 "keyMappingMode: \(keyMappingMode.rawValue)",
                 "minimizeActiveWindowOnRepeatedShortcut: \(minimizeActiveWindowOnRepeatedShortcut)",
+                "osdShowDelayMilliseconds: \(osdShowDelayMilliseconds)",
                 "assignments:"
             ]
 
@@ -154,6 +170,10 @@ final class AssignmentStore {
 
     private func normalize(_ letter: Character) -> Character {
         Character(String(letter).lowercased())
+    }
+
+    private static func clampOSDShowDelay(_ milliseconds: Int) -> Int {
+        min(max(milliseconds, osdShowDelayMillisecondsRange.lowerBound), osdShowDelayMillisecondsRange.upperBound)
     }
 
     static func defaultConfigURL() -> URL {

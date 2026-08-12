@@ -39,6 +39,8 @@ struct SettingsView: View {
     @State private var selectedPane: Pane = .overview
     @State private var selectedLetter: Character = "a"
     @State private var selectedBundleIdentifier = ""
+    @State private var osdShowDelayDraft = Double(AssignmentStore.defaultOSDShowDelayMilliseconds)
+    @State private var isEditingOSDShowDelay = false
 
     var body: some View {
         HStack(spacing: 0) {
@@ -52,6 +54,10 @@ struct SettingsView: View {
         .background(Color(nsColor: .windowBackgroundColor))
         .onAppear {
             syncDefaultSelectedApp()
+            syncOSDShowDelayDraft()
+        }
+        .onChange(of: appState.osdShowDelayMilliseconds) { _, _ in
+            syncOSDShowDelayDraft()
         }
     }
 
@@ -290,6 +296,10 @@ struct SettingsView: View {
                 }
             }
 
+            settingsGroup(L10n.tr("settings.group.overlay")) {
+                osdShowDelayControl
+            }
+
             settingsGroup(L10n.tr("settings.group.keyMapping")) {
                 VStack(alignment: .leading, spacing: 10) {
                     Picker(
@@ -312,6 +322,80 @@ struct SettingsView: View {
                 }
             }
         }
+    }
+
+    private var osdShowDelayControl: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 12) {
+                Text(L10n.tr("settings.osdShowDelay"))
+                    .font(.callout)
+
+                Spacer(minLength: 12)
+
+                Text(osdShowDelayValueText)
+                    .font(.system(.callout, design: .monospaced).weight(.semibold))
+                    .foregroundStyle(.secondary)
+                    .frame(width: 82, alignment: .trailing)
+            }
+
+            Slider(
+                value: $osdShowDelayDraft,
+                in: osdShowDelayRange,
+                step: 10,
+                onEditingChanged: { isEditing in
+                    isEditingOSDShowDelay = isEditing
+
+                    if !isEditing {
+                        commitOSDShowDelayDraft()
+                    }
+                }
+            )
+            .onChange(of: osdShowDelayDraft) { _, _ in
+                guard !isEditingOSDShowDelay else {
+                    return
+                }
+
+                commitOSDShowDelayDraft()
+            }
+
+            Text(L10n.tr("settings.osdShowDelayDetail"))
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private var osdShowDelayRange: ClosedRange<Double> {
+        Double(AssignmentStore.osdShowDelayMillisecondsRange.lowerBound)
+            ... Double(AssignmentStore.osdShowDelayMillisecondsRange.upperBound)
+    }
+
+    private var osdShowDelayValueText: String {
+        let milliseconds = Int(osdShowDelayDraft.rounded())
+
+        if milliseconds == 0 {
+            return L10n.tr("settings.osdShowDelayInstant")
+        }
+
+        return L10n.tr("settings.osdShowDelayValue", milliseconds)
+    }
+
+    private func syncOSDShowDelayDraft() {
+        let milliseconds = Double(appState.osdShowDelayMilliseconds)
+
+        if osdShowDelayDraft != milliseconds {
+            osdShowDelayDraft = milliseconds
+        }
+    }
+
+    private func commitOSDShowDelayDraft() {
+        let milliseconds = Int(osdShowDelayDraft.rounded())
+
+        guard milliseconds != appState.osdShowDelayMilliseconds else {
+            return
+        }
+
+        actions.setOSDShowDelayMilliseconds(milliseconds)
     }
 
     private var assignmentsPane: some View {
