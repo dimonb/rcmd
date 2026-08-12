@@ -15,6 +15,7 @@ final class AppStateModel: ObservableObject {
     @Published private(set) var appCatalog: [AppCatalogEntry] = []
     @Published private(set) var keyMappingMode: KeyMappingMode = .activeLayout
     @Published private(set) var minimizeActiveWindowOnRepeatedShortcut = false
+    @Published private(set) var osdShowDelayMilliseconds = AssignmentStore.defaultOSDShowDelayMilliseconds
     @Published private(set) var launchAtLoginEnabled = false
     @Published private(set) var launchAtLoginStatus = L10n.tr("state.unknown")
     @Published private(set) var windows: [WindowInfo] = []
@@ -41,6 +42,10 @@ final class AppStateModel: ObservableObject {
 
     func refreshMinimizeActiveWindowOnRepeatedShortcut(_ enabled: Bool) {
         minimizeActiveWindowOnRepeatedShortcut = enabled
+    }
+
+    func refreshOSDShowDelayMilliseconds(_ milliseconds: Int) {
+        osdShowDelayMilliseconds = milliseconds
     }
 
     func refreshLaunchAtLogin(_ state: LaunchAtLoginState) {
@@ -157,6 +162,13 @@ final class AppStateModel: ObservableObject {
         lastShortcutMessage = enabled
             ? L10n.tr("status.repeatedShortcutMinimizeEnabled")
             : L10n.tr("status.repeatedShortcutMinimizeDisabled")
+        statusMessage = lastShortcutMessage
+
+        AppLog.app.info("\(self.lastShortcutMessage, privacy: .public)")
+    }
+
+    func recordOSDShowDelayChange(_ milliseconds: Int) {
+        lastShortcutMessage = L10n.tr("status.osdShowDelayChanged", milliseconds)
         statusMessage = lastShortcutMessage
 
         AppLog.app.info("\(self.lastShortcutMessage, privacy: .public)")

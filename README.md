@@ -96,8 +96,8 @@ The Settings window is split into focused panes:
 
 - **Overview**: Accessibility, keyboard monitor, Launch at Login, app/window
   counts.
-- **Shortcuts**: active shortcuts, repeated-shortcut behavior, and key mapping
-  mode.
+- **Shortcuts**: active shortcuts, repeated-shortcut behavior, overlay delay,
+  and key mapping mode.
 - **Assignments**: manual assignment editor and current dynamic assignments.
 - **Windows**: readable Accessibility window metadata.
 - **Diagnostics**: status messages and recent key events.
@@ -128,6 +128,7 @@ Example:
 ```yaml
 keyMappingMode: activeLayout
 minimizeActiveWindowOnRepeatedShortcut: false
+osdShowDelayMilliseconds: 120
 assignments:
   c: com.google.Chrome
   f: com.apple.finder

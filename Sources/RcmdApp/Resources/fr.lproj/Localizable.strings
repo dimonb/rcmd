@@ -63,6 +63,7 @@
 "settings.group.snapshot" = "Instantané";
 "settings.group.shortcuts" = "Raccourcis";
 "settings.group.behavior" = "Comportement";
+"settings.group.overlay" = "Overlay";
 "settings.group.keyMapping" = "Correspondance des touches";
 "settings.group.manualAssignment" = "Affectation manuelle";
 "settings.group.currentAssignments" = "Affectations actuelles";
@@ -84,6 +85,10 @@
 "settings.shortcut.assignFrontmost" = "Affecter l’app au premier plan";
 "settings.minimizeRepeatedShortcut" = "Réduire la fenêtre active lors d’un raccourci d’app répété";
 "settings.minimizeRepeatedShortcutDetail" = "Quand l’app cible est déjà active, appuyer de nouveau sur son raccourci ⌘ réduit la fenêtre focalisée au lieu de refocaliser l’app.";
+"settings.osdShowDelay" = "Délai de l’overlay";
+"settings.osdShowDelayValue" = "%d ms";
+"settings.osdShowDelayInstant" = "Immédiat";
+"settings.osdShowDelayDetail" = "Durée pendant laquelle la touche ⌘ droite doit être maintenue avant l’apparition de l’overlay. Si un raccourci est pressé avant, l’overlay reste masqué.";
 "settings.keyMapping" = "Correspondance des touches";
 "settings.keyMappingActiveLayoutDetail" = "Utilise la disposition latine active de macOS, avec repli QWERTY physique pour les dispositions non latines.";
 "settings.keyMappingPhysicalDetail" = "Utilise les positions physiques QWERTY indépendamment de la disposition clavier active.";
@@ -117,6 +122,7 @@
 "status.keyMappingChanged" = "Mode de correspondance des touches défini sur %@.";
 "status.repeatedShortcutMinimizeEnabled" = "La réduction lors d’un raccourci d’app répété est activée.";
 "status.repeatedShortcutMinimizeDisabled" = "La réduction lors d’un raccourci d’app répété est désactivée.";
+"status.osdShowDelayChanged" = "Délai de l’overlay réglé sur %d ms.";
 
 "appActivation.focused" = "%@ focalisée.";
 "appActivation.minimized" = "Fenêtre active de %@ réduite.";

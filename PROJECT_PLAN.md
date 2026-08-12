@@ -47,6 +47,8 @@ Done:
 - Assignments persist in `~/.config/rcmd/config.yaml`.
 - Holding right Command opens a polished, scrollable OSD assignment overlay
   with app icons.
+- The overlay show delay is configurable in Settings (0-1000 ms, 120 ms by
+  default) and persisted in config.
 - Visual assignment editor with app icons exists in Settings.
 - Launch at Login setting exists through `SMAppService`.
 - Read-only window diagnostics exist through Accessibility API and are shown in

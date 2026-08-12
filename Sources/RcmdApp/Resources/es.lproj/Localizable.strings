@@ -63,6 +63,7 @@
 "settings.group.snapshot" = "Instantánea";
 "settings.group.shortcuts" = "Atajos";
 "settings.group.behavior" = "Comportamiento";
+"settings.group.overlay" = "Overlay";
 "settings.group.keyMapping" = "Asignación de teclas";
 "settings.group.manualAssignment" = "Asignación manual";
 "settings.group.currentAssignments" = "Asignaciones actuales";
@@ -84,6 +85,10 @@
 "settings.shortcut.assignFrontmost" = "Asignar la app en primer plano";
 "settings.minimizeRepeatedShortcut" = "Minimizar la ventana activa al repetir el atajo de app";
 "settings.minimizeRepeatedShortcutDetail" = "Cuando la app de destino ya está activa, pulsar de nuevo su atajo ⌘ minimiza la ventana enfocada en vez de reenfocar la app.";
+"settings.osdShowDelay" = "Retardo del overlay";
+"settings.osdShowDelayValue" = "%d ms";
+"settings.osdShowDelayInstant" = "Instantáneo";
+"settings.osdShowDelayDetail" = "Cuánto hay que mantener pulsada la tecla ⌘ derecha antes de que aparezca el overlay. Si pulsas un atajo antes, el overlay no se muestra.";
 "settings.keyMapping" = "Asignación de teclas";
 "settings.keyMappingActiveLayoutDetail" = "Usa la distribución latina activa de macOS, con alternativa QWERTY física para distribuciones no latinas.";
 "settings.keyMappingPhysicalDetail" = "Usa posiciones físicas QWERTY sin importar la distribución activa del teclado.";
@@ -117,6 +122,7 @@
 "status.keyMappingChanged" = "Modo de asignación de teclas establecido en %@.";
 "status.repeatedShortcutMinimizeEnabled" = "Minimizar al repetir el atajo de app está activado.";
 "status.repeatedShortcutMinimizeDisabled" = "Minimizar al repetir el atajo de app está desactivado.";
+"status.osdShowDelayChanged" = "Retardo del overlay ajustado a %d ms.";
 
 "appActivation.focused" = "%@ enfocada.";
 "appActivation.minimized" = "Ventana activa de %@ minimizada.";
