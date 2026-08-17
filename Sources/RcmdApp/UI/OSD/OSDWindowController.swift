@@ -12,6 +12,8 @@ final class OSDWindowController: NSObject, NSWindowDelegate {
     private let appState: AppStateModel
     private let actions: OSDActions
     private var panel: NSPanel?
+    private var panelTeardownWorkItem: DispatchWorkItem?
+    private let panelIdleTeardownDelay: TimeInterval = 60
 
     init(appState: AppStateModel, actions: OSDActions) {
         self.appState = appState
@@ -20,6 +22,7 @@ final class OSDWindowController: NSObject, NSWindowDelegate {
     }
 
     func show() {
+        cancelPanelTeardown()
         let panel = panel ?? makePanel()
         self.panel = panel
         position(panel, preferredSize: NSSize(width: 720, height: 430))
@@ -32,6 +35,7 @@ final class OSDWindowController: NSObject, NSWindowDelegate {
     }
 
     func showSearch() {
+        cancelPanelTeardown()
         let panel = panel ?? makePanel()
         self.panel = panel
 
@@ -80,9 +84,10 @@ final class OSDWindowController: NSObject, NSWindowDelegate {
             context.duration = 0.06
             panel.animator().alphaValue = 0
         } completionHandler: {
-            Task { @MainActor in
+            Task { @MainActor [weak self] in
                 panel.orderOut(nil)
                 panel.alphaValue = 1
+                self?.schedulePanelTeardown()
             }
         }
     }
@@ -97,6 +102,40 @@ final class OSDWindowController: NSObject, NSWindowDelegate {
         panel.alphaValue = 0
         panel.orderOut(nil)
         panel.alphaValue = 1
+        schedulePanelTeardown()
+    }
+
+    // The hidden panel keeps a full SwiftUI view tree that AppKit walks on every
+    // WindowServer remote-context notification, so an idle app never stops
+    // paying for it. Keep the panel warm for repeated shortcuts, then drop it.
+    private func schedulePanelTeardown() {
+        cancelPanelTeardown()
+
+        let workItem = DispatchWorkItem { [weak self] in
+            Task { @MainActor in
+                self?.tearDownPanelIfHidden()
+            }
+        }
+        panelTeardownWorkItem = workItem
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + panelIdleTeardownDelay, execute: workItem)
+    }
+
+    private func cancelPanelTeardown() {
+        panelTeardownWorkItem?.cancel()
+        panelTeardownWorkItem = nil
+    }
+
+    private func tearDownPanelIfHidden() {
+        panelTeardownWorkItem = nil
+
+        guard let panel, !panel.isVisible else {
+            return
+        }
+
+        panel.delegate = nil
+        panel.close()
+        self.panel = nil
     }
 
     private func makePanel() -> NSPanel {

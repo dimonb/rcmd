@@ -10,28 +10,30 @@ struct MenuBarActions {
 }
 
 @MainActor
-final class MenuBarController {
+final class MenuBarController: NSObject, NSMenuDelegate {
     private let appState: AppStateModel
     private let actions: MenuBarActions
     private let statusItem: NSStatusItem
+    private let menu = NSMenu()
 
     init(appState: AppStateModel, actions: MenuBarActions) {
         self.appState = appState
         self.actions = actions
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+        super.init()
 
         if let button = statusItem.button {
             button.title = ""
             button.image = MenuBarIcon.make()
             button.imagePosition = .imageOnly
-            button.toolTip = L10n.tr("app.name")
         }
 
-        refresh()
+        menu.delegate = self
+        statusItem.menu = menu
     }
 
-    func refresh() {
-        let menu = NSMenu()
+    func menuNeedsUpdate(_ menu: NSMenu) {
+        menu.removeAllItems()
 
         let titleItem = NSMenuItem(title: L10n.tr("menu.title"), action: nil, keyEquivalent: "")
         titleItem.isEnabled = false
@@ -70,8 +72,6 @@ final class MenuBarController {
 
         menu.addItem(NSMenuItem.separator())
         menu.addItem(menuItem(title: L10n.tr("menu.quit"), action: #selector(quit), keyEquivalent: "q"))
-
-        statusItem.menu = menu
     }
 
     private func menuItem(title: String, action: Selector, keyEquivalent: String = "") -> NSMenuItem {
@@ -90,17 +90,14 @@ final class MenuBarController {
 
     @objc private func requestAccessibilityPermission() {
         actions.requestAccessibilityPermission()
-        refresh()
     }
 
     @objc private func startEventTap() {
         actions.startEventTap()
-        refresh()
     }
 
     @objc private func stopEventTap() {
         actions.stopEventTap()
-        refresh()
     }
 
     @objc private func quit() {

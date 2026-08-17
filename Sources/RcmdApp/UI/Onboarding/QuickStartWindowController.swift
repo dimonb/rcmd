@@ -8,7 +8,7 @@ struct QuickStartActions {
 }
 
 @MainActor
-final class QuickStartWindowController {
+final class QuickStartWindowController: NSObject, NSWindowDelegate {
     private let appState: AppStateModel
     private let actions: QuickStartActions
     private var window: NSWindow?
@@ -16,6 +16,7 @@ final class QuickStartWindowController {
     init(appState: AppStateModel, actions: QuickStartActions) {
         self.appState = appState
         self.actions = actions
+        super.init()
     }
 
     func show() {
@@ -27,6 +28,7 @@ final class QuickStartWindowController {
             newWindow.setContentSize(NSSize(width: 660, height: 480))
             newWindow.minSize = NSSize(width: 620, height: 440)
             newWindow.isReleasedWhenClosed = false
+            newWindow.delegate = self
             newWindow.center()
             window = newWindow
         }
@@ -36,5 +38,19 @@ final class QuickStartWindowController {
 
     func close() {
         window?.close()
+    }
+
+    // See SettingsWindowController.windowWillClose: a retained closed window
+    // keeps paying for AppKit window maintenance while the app sits idle.
+    func windowWillClose(_ notification: Notification) {
+        guard let closing = notification.object as? NSWindow, closing === window else {
+            return
+        }
+
+        closing.delegate = nil
+
+        Task { @MainActor [weak self] in
+            self?.window = nil
+        }
     }
 }
