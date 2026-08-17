@@ -124,7 +124,6 @@ final class RcmdApp: NSObject, NSApplicationDelegate {
         refreshAppCatalog()
         refreshWindows()
         installWorkspaceObservers()
-        menuBarController?.refresh()
 
         startPermissionTimerIfNeeded()
 
@@ -165,11 +164,9 @@ final class RcmdApp: NSObject, NSApplicationDelegate {
         AccessibilityPermission.request()
         refreshAccessibilityAndStartMonitorIfReady()
         startPermissionTimerIfNeeded()
-        menuBarController?.refresh()
     }
 
     private func refreshAccessibilityAndStartMonitorIfReady() {
-        let wasTrusted = appState.accessibilityTrusted
         appState.refreshAccessibilityStatus()
 
         if appState.accessibilityTrusted {
@@ -179,8 +176,6 @@ final class RcmdApp: NSObject, NSApplicationDelegate {
 
         if appState.accessibilityTrusted, !eventTapController.isRunning {
             startEventTap()
-        } else if !wasTrusted || wasTrusted != appState.accessibilityTrusted {
-            menuBarController?.refresh()
         }
     }
 
@@ -199,7 +194,6 @@ final class RcmdApp: NSObject, NSApplicationDelegate {
     private func startEventTap() {
         if eventTapController.isRunning {
             appState.eventTapRunning = true
-            menuBarController?.refresh()
             return
         }
 
@@ -207,13 +201,11 @@ final class RcmdApp: NSObject, NSApplicationDelegate {
             try eventTapController.start()
             appState.eventTapRunning = true
             appState.statusMessage = L10n.tr("status.keyboardMonitorRunning")
-            menuBarController?.refresh()
         } catch {
             appState.eventTapRunning = false
             appState.statusMessage = L10n.tr("status.keyboardMonitorFailed", error.localizedDescription)
             AppLog.hotkeys.error("Failed to start event tap: \(error.localizedDescription, privacy: .public)")
             showSettings()
-            menuBarController?.refresh()
         }
     }
 
@@ -223,7 +215,6 @@ final class RcmdApp: NSObject, NSApplicationDelegate {
         osdWindowController?.hide()
         appState.eventTapRunning = false
         appState.statusMessage = L10n.tr("status.keyboardMonitorStopped")
-        menuBarController?.refresh()
     }
 
     private func handle(shortcut: KeyShortcut) {
@@ -279,8 +270,6 @@ final class RcmdApp: NSObject, NSApplicationDelegate {
             if shouldRefreshWindows {
                 scheduleWindowRefresh()
             }
-
-            menuBarController?.refresh()
         }
     }
 
@@ -393,7 +382,6 @@ final class RcmdApp: NSObject, NSApplicationDelegate {
         appState.recordManualAssignmentResult(result)
         refreshAssignments()
         refreshAppCatalog()
-        menuBarController?.refresh()
     }
 
     func removeManualAssignment(for letter: Character) {
@@ -401,35 +389,30 @@ final class RcmdApp: NSObject, NSApplicationDelegate {
         appState.recordManualAssignmentRemovalResult(result)
         refreshAssignments()
         refreshAppCatalog()
-        menuBarController?.refresh()
     }
 
     func setKeyMappingMode(_ mode: KeyMappingMode) {
         assignmentStore.setKeyMappingMode(mode)
         refreshKeyMappingMode()
         appState.recordKeyMappingModeChange(mode)
-        menuBarController?.refresh()
     }
 
     func setMinimizeActiveWindowOnRepeatedShortcut(_ enabled: Bool) {
         assignmentStore.setMinimizeActiveWindowOnRepeatedShortcut(enabled)
         refreshMinimizeActiveWindowOnRepeatedShortcut()
         appState.recordMinimizeActiveWindowOnRepeatedShortcutChange(enabled)
-        menuBarController?.refresh()
     }
 
     func setOSDShowDelayMilliseconds(_ milliseconds: Int) {
         assignmentStore.setOSDShowDelayMilliseconds(milliseconds)
         refreshOSDShowDelay()
         appState.recordOSDShowDelayChange(assignmentStore.osdShowDelayMilliseconds)
-        menuBarController?.refresh()
     }
 
     func setLaunchAtLoginEnabled(_ enabled: Bool) {
         let result = launchAtLoginController.setEnabled(enabled)
         refreshLaunchAtLogin()
         appState.recordLaunchAtLoginResult(result)
-        menuBarController?.refresh()
     }
 
     func focus(window: WindowInfo) {
@@ -558,7 +541,6 @@ final class RcmdApp: NSObject, NSApplicationDelegate {
                 self.refreshAssignments()
                 self.refreshAppCatalog()
                 self.refreshWindows()
-                self.menuBarController?.refresh()
             }
         }
     }
